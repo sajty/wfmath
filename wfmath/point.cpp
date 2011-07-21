@@ -120,6 +120,12 @@ Point<3> Point<3>::toParentCoords(const Point<3>& origin,
 {
   return origin + (*this - Point().setToOrigin()).rotate(rotation);
 }
+template<int dim>
+const Point<dim>& Point<dim>::ZERO()
+{
+  static ZeroPrimitive<Point<dim> > zeroPoint(dim);
+  return zeroPoint.getShape();
+}
 
 template class Point<3>;
 template class Point<2>;
