@@ -182,6 +182,12 @@ void Vector<3>::asSpherical(CoordType& r, CoordType& theta,
   theta = d[1];
   phi = d[2];
 }
+template<int dim> 
+const Vector<dim>& Vector<dim>::ZERO()
+{
+    static ZeroPrimitive<Vector<dim> > zeroVector(dim);
+    return zeroVector.getShape();
+}
 
 template class Vector<3>;
 template class Vector<2>;
@@ -216,5 +222,4 @@ template Vector<2> operator+<2>(const Vector<2> &, const Vector<2> &);
 
 template Vector<3> operator-<3>(const Vector<3> &, const Vector<3> &);
 template Vector<2> operator-<2>(const Vector<2> &, const Vector<2> &);
-
 }
