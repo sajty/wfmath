@@ -31,6 +31,7 @@
 
 #include "basis.h"
 #include "quaternion.h"
+#include "axisbox.h"
 
 #include <vector>
 #include <list>
@@ -125,6 +126,18 @@ const Point<dim>& Point<dim>::ZERO()
 {
   static ZeroPrimitive<Point<dim> > zeroPoint(dim);
   return zeroPoint.getShape();
+}
+
+template<int dim>
+Point<dim> Point<dim>::toParentCoords(const class AxisBox<dim>& coords) const
+{
+  return coords.lowCorner() + (*this - Point().setToOrigin());
+}
+
+template<int dim>
+Point<dim> Point<dim>::toLocalCoords(const AxisBox<dim>& coords) const
+{
+  return Point().setToOrigin() + (*this - coords.lowCorner());
 }
 
 template class Point<3>;
