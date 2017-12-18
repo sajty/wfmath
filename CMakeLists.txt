@@ -74,16 +74,16 @@ macro(wf_add_test TEST_FILE)
     add_dependencies(check ${TEST_NAME})
 endmacro()
 
+if (!WIN32)
+    # We only need Atlas for tests
+    pkg_check_modules(WF atlascpp-0.7>=0.7)
 
-# We only need Atlas for tests
-pkg_check_modules(WF atlascpp-0.7>=0.7)
-
-if (WF_FOUND)
-    wf_add_test(atlas/atlas_0_7_test.cpp)
-    target_link_libraries(atlas_0_7_test ${WF_LDFLAGS})
-    target_include_directories(atlas_0_7_test PUBLIC ${WF_INCLUDE_DIRS})
-endif (WF_FOUND)
-
+    if (WF_FOUND)
+        wf_add_test(atlas/atlas_0_7_test.cpp)
+        target_link_libraries(atlas_0_7_test ${WF_LDFLAGS})
+        target_include_directories(atlas_0_7_test PUBLIC ${WF_INCLUDE_DIRS})
+    endif (WF_FOUND)
+endif (!WIN32)
 # Define source files for libraries
 
 set(SOURCE_FILES
