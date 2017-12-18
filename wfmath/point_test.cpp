@@ -30,8 +30,7 @@
 #define DEBUG
 #endif
 
-//This is done in order to be able to access Point::m_elem
-#define private public
+#define UNITTEST_POINT
 
 #include "const.h"
 #include "vector.h"

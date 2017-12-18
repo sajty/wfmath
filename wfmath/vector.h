@@ -36,6 +36,11 @@
 
 #include <cmath>
 
+#ifdef UNITTEST_VECTOR
+template<int dim>
+void test_vector(const WFMath::Vector<dim>& v);
+#endif
+
 namespace WFMath {
 
 template<int dim>
@@ -344,6 +349,10 @@ class Vector {
   void asSpherical(CoordType& r, CoordType& theta, CoordType& phi) const;
 
   const CoordType* elements() const {return m_elem;}
+
+#ifdef UNITTEST_VECTOR
+  friend void ::test_vector<dim>(const WFMath::Vector<dim>& v);
+#endif
 
  private:
   double _scaleEpsilon(const Vector& v, CoordType epsilon = numeric_constants<CoordType>::epsilon()) const

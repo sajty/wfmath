@@ -33,6 +33,11 @@
 
 #include <cmath>
 
+#ifdef UNITTEST_POINT
+template<int dim>
+void test_point(const WFMath::Point<dim>& p);
+#endif
+
 namespace WFMath {
 
 template<int dim>
@@ -256,6 +261,10 @@ class Point
   void asSpherical(CoordType& r, CoordType& theta, CoordType& phi) const;
 
   const CoordType* elements() const {return m_elem;}
+
+#ifdef UNITTEST_POINT
+  friend void ::test_point<dim>(const WFMath::Point<dim>& p);
+#endif
 
  private:
   CoordType m_elem[dim];
