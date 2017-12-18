@@ -20,8 +20,13 @@ set(WFMATH_ABI_AGE 0)
 math(EXPR WFMATH_SOVERSION ${WFMATH_ABI_CURRENT}-${WFMATH_ABI_AGE})
 set(WFMATH_ABI_VERSION ${WFMATH_SOVERSION}.${WFMATH_ABI_AGE}.${WFMATH_ABI_REVISION})
 
-# Set compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+if (WIN32)
+  set(BUILD_SHARED_LIBS OFF) # On Win32, only static libs are exporting all symbols.
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W0") # For now, disable warnings to speed up compile time
+else ()
+  set(BUILD_SHARED_LIBS ON)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+endif ()
 
 include_directories("${PROJECT_SOURCE_DIR}")
 
@@ -34,14 +39,15 @@ set(DESCRIPTION "A math library for the Worldforge system.")
 # This macro defines a library
 macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
 
-    add_library(${_LIB_NAME} SHARED ${${_SOURCE_FILES_VAR}})
+    add_library(${_LIB_NAME} ${${_SOURCE_FILES_VAR}} ${${_HEADER_FILES_VAR}})
     set_target_properties(${_LIB_NAME} PROPERTIES
             VERSION ${WFMATH_ABI_VERSION}
-            SOVERSION ${WFMATH_SOVERSION}
-            )
+            SOVERSION ${WFMATH_SOVERSION})
 
     install(TARGETS ${_LIB_NAME}
-            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     foreach (file ${${_HEADER_FILES_VAR}})
         get_filename_component(dir ${file} DIRECTORY)
